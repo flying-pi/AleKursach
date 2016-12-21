@@ -10,7 +10,7 @@
 class Boruvka {
 public:
     Boruvka(Graph *graph);
-    void findTree();
+    Graph* findTree();
 
 private:
     Graph *graph;

@@ -2,22 +2,70 @@
 // Created by Yura Braiko on 20.12.16.
 //
 
+#include <iostream>
 #include "Boruvka.h"
 
 
 Boruvka::Boruvka(Graph *graph) {
-this->graph = graph;
+    this->graph = graph;
 }
 
-void Boruvka::findTree() {
+Graph *Boruvka::findTree() {
+    Graph *tree = new Graph();
+    vector<char *> vertexes = graph->getVertexNames();
+    for (int i = 0; i < vertexes.size(); i++)
+        tree->addVertex(vertexes[i]);
+
+    char *connectionPoint = new char[10];
+    int w;
+    for (int i = 0; i < vertexes.size(); i++) {
+        if (!graph->getMinValue(vertexes[i], connectionPoint, w)) {
+            cout << endl << "ERROR!!! this is not linked graph";
+            return nullptr;
+        }
+        tree->addAge(vertexes[i], connectionPoint, w);
+    }
+
+    tree->print();
+
+    vector<vector<char *>> components = tree->getComonents();
+    for (int i = 0; i < components.size(); i++) {
+        for (int j = 0; j < components[i].size(); j++)
+            cout << components[i][j] << "\t";
+        cout << endl;
+    }
+    while (components.size() > 1) {
+        char *minFrom;
+        char *minTo;
+        int minW = -1;
+        for (int i = 0; i < components[0].size(); i++) {
+            for (int j = 0; j < components[1].size(); j++) {
+                cout << components[0][i] << " :: " << components[1][j] << endl;
+                w = graph->getWeight(components[0][i], components[1][j]);
+                if (w == -1)
+                    continue;
+                if(minW == -1 || w<minW){
+                    minW = w;
+                    minFrom = components[0][i];
+                    minTo = components[1][j];
+                }
+            }
+        }
+        if(minW == -1){
+            cout << "ERROR!! this is not linked graph";
+            return nullptr;
+        }
+        tree->addAge(minFrom,minTo,minW);
+        for(int i=0;i<components[0].size();i++)
+            components[1].push_back(components[0][i]);
+        components.erase(components.begin());
+        return tree;
+    }
+
+
+
 /*
- * 1 - создаешь новый обьект графа который будет являтся деревом
- * 2 - в классе граффа создаешь метод для добавление новой точки и для добавление соединение(метод принимает куда
- * откуда и вес,  метод должен не допускать дублирования,  вставить там проверку)
- * 3 -  пишешь функцию в класе граффа которая принимает как указатели ссылку на имя и ссылку на вес и возражает булевое значение
- * смысл функции в переданые ссылочные переменные записать имя ендпоинта и его вес.  Возращает правду если минимальное соединение есть
- * и лож в противном случае(если где-то будет лож - то нужно просто стопать алгоритм потому что это означает что у тебя просто висит
- * точка и что дерево там вообще построить нельзя
+
  * 4 -  на этом этапе у тебя в граффе должны образоватся компоненты(в новом графе).  Пишешь функцию в классе граффа для поиска
  * компонент - вовзращать должна vector<vector<char*>> внутрений вектор  - последовательность имен вершин в компоненте
  * а внешний  - список всех компонент.

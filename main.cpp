@@ -1,11 +1,34 @@
 #include <iostream>
 #include "graph.h"
+#include "Boruvka.h"
 
 using namespace std;
 
 int main() {
-	setlocale(LC_ALL, "RU");
-    Graph graph("/Users/yurabraiko/dev/temp/c++/Alex/testGraph.txt");
-    graph.print();
-    return  0;
+    setlocale(LC_ALL, "RU");
+    Graph *graph;
+    int flag;
+    cout << "????? ?????? ?????? ? ????? ??????? 1\n";//file
+    cout << "????? ?????? ?????? ? ? ?????????? ??????? 2\n";
+    cout << "??? ?????? ??????? ????? ?????? ??????\n";
+//    cin >> flag;
+    flag = 1;
+    switch (flag) {
+        case 1:
+            graph = new Graph("/Users/yurabraiko/dev/temp/c++/Alex/testGraph.txt");
+            break;
+        case 2:
+            graph = new Graph();
+            graph->readFromConsole();
+            break;
+        default:
+            break;
+    }
+    graph->print();
+    Boruvka boruvka(graph);
+    Graph *result = boruvka.findTree();
+    if (result != nullptr)
+        result->print();
+
+    return 0;
 }

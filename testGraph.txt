@@ -1,10 +1,19 @@
 A B 3
+
 A C 4
+
 A D 5
+
 C D 2
+
 C E 8
+
 C F 1
+
 D E 7
+
 E F 4
+
 E K 5
+
 F K 3

@@ -13,6 +13,10 @@ class Graph {
 public:
     Graph(char *fileName);
 
+	Graph();
+
+    void readFromConsole();
+
     int getVertexCount();
 
     bool isAgeExist(char *a, char *b);
@@ -21,7 +25,15 @@ public:
 
     vector<char *> getVertexNames();
 
+    void addVertex(char *newPoint);
+
+    void addAge(char *from,char *to,int w);
+
+    bool getMinValue(char *target,char *result,int &w);
+
     void print();
+
+    vector<vector<char *>> getComonents();
 
 private:
     const static  int vertexNameLength = 10;
